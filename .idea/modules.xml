@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Dewidar.iml" filepath="$PROJECT_DIR$/Dewidar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/foreache.iml" filepath="$PROJECT_DIR$/foreache.iml" />
     </modules>
   </component>
 </project>

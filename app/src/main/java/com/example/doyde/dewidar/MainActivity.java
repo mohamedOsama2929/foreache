@@ -1,7 +1,9 @@
 package com.example.doyde.dewidar;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.drm.ProcessedData;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,44 +32,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseAuth=FirebaseAuth.getInstance();
-        progressDialog=new ProgressDialog(this);
-        buttonRegister=(Button)findViewById(R.id.buttonRegister);
-        editTextEmaile=(EditText)findViewById(R.id.editTextEmail);
-        editTextPassword=(EditText)findViewById(R.id.editTextPassword);
-        textViewSignin=(TextView)findViewById(R.id.textViewSignin);
+        firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
+        buttonRegister = (Button) findViewById(R.id.buttonRegister);
+        editTextEmaile = (EditText) findViewById(R.id.editTextEmail);
+        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        textViewSignin = (TextView) findViewById(R.id.textViewSignin);
+
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            //start profile activity
+            finish();
+            startActivity(new Intent(getApplicationContext(), Profile.class));
+        }
 
         buttonRegister.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
 
     }
-    private void registerUser(){
-        String email=editTextEmaile.getText().toString().trim();
-        String passowrd=editTextPassword.getText().toString().trim();
-        if(TextUtils.isEmpty(email)){
+
+    private void registerUser() {
+        String email = editTextEmaile.getText().toString().trim();
+        String passowrd = editTextPassword.getText().toString().trim();
+        if (TextUtils.isEmpty(email)) {
             //email is empaty
-            Toast.makeText(this,"please enter email",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "please enter email", Toast.LENGTH_SHORT).show();
             //stop function excution
             return;
         }
-        if(TextUtils.isEmpty(passowrd)){
+        if (TextUtils.isEmpty(passowrd)) {
             //password is empity
-            Toast.makeText(this,"please enter password",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
         progressDialog.setMessage("Registering User...");
         progressDialog.show();
-        firebaseAuth.createUserWithEmailAndPassword(email,passowrd)
+        firebaseAuth.createUserWithEmailAndPassword(email, passowrd)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             //start the profile activity here
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), Profile.class));
+
+                        } else {
                             progressDialog.hide();
-                            Toast.makeText(MainActivity.this,"Regestered Successfully",Toast.LENGTH_SHORT).show();
-                        }else{
-                            progressDialog.hide();
-                            Toast.makeText(MainActivity.this,"could not register try again",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "could not register try again", Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -78,12 +89,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v== buttonRegister){
+        if (v == buttonRegister) {
             registerUser();
         }
-        if (v== textViewSignin){
+        if (v == textViewSignin) {
 
             //will open login activity here
+
+            startActivity(new Intent(this, Login.class));
         }
 
     }
